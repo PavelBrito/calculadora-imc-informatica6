@@ -6,10 +6,14 @@
   <title>Calculadora de IMC — Informática VI, Unidad 5 Actividad 2</title>
   <link rel="stylesheet" href="css/styles.css" id="hoja-estilos">
   <script>
-    // Variante visual para comparar estilos: ?tema=b carga css/variante-b.css
-    if (new URLSearchParams(location.search).get('tema') === 'b') {
-      document.getElementById('hoja-estilos').href = 'css/variante-b.css';
-    }
+    // Variantes visuales para comparar estilos: ?tema=b o ?tema=c
+    (function () {
+      var tema = new URLSearchParams(location.search).get('tema');
+      var hojas = { b: 'css/variante-b.css', c: 'css/variante-c.css' };
+      if (hojas[tema]) {
+        document.getElementById('hoja-estilos').href = hojas[tema];
+      }
+    })();
   </script>
 </head>
 <body>
