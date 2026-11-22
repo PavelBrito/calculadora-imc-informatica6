@@ -1,0 +1,49 @@
+/* Mascota animada (báscula) — común a todos los temas.
+   Se carga después de la hoja del tema para que funcione con A, B y C. */
+
+.mascota {
+  display: flex;
+  justify-content: center;
+  margin-bottom: .25rem;
+}
+
+.mascota svg {
+  width: 126px;
+  height: auto;
+  animation: flotar 4.5s ease-in-out infinite;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, .28));
+}
+
+.ojos {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: parpadeo 6.5s ease-in-out infinite;
+}
+
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+@keyframes parpadeo {
+  0%, 90%, 100% { transform: scaleY(1); }
+  94%           { transform: scaleY(.08); }
+}
+
+.mascota.salta svg { animation: salto .55s cubic-bezier(.3, .9, .3, 1); }
+
+@keyframes salto {
+  0%   { transform: translateY(0) scale(1); }
+  32%  { transform: translateY(-15px) scale(1.07); }
+  62%  { transform: translateY(0) scale(.97); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascota svg,
+  .ojos { animation: none; }
+}
+
+@media (max-width: 480px) {
+  .mascota svg { width: 104px; }
+}

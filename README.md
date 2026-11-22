@@ -19,6 +19,23 @@ Fórmula:
 El valor se muestra con 2 decimales y se acompaña de su interpretación (categoría) con un
 color de fondo distintivo.
 
+Incluye una **mascota animada** (una báscula dibujada en SVG dentro del propio HTML, sin
+imágenes externas): flota, parpadea y cambia de expresión según el resultado —sonrisa en peso
+saludable, boca neutra en sobrepeso, gesto de preocupación en obesidad y boca pequeña de
+sorpresa en bajo peso—, además de dar un pequeño salto cada vez que el valor cambia. Las
+animaciones se desactivan con `prefers-reduced-motion: reduce`.
+
+## Temas visuales
+
+El tema oficial es el **C (oscuro)** y es el que carga por defecto. Las otras dos propuestas
+quedan disponibles para comparar, sin duplicar el HTML:
+
+- `index.html` → tema C, oscuro (css/styles.css)
+- `index.html?tema=a` → tema A, clínico sobrio en claro (css/variante-a.css)
+- `index.html?tema=b` → tema B, claro con acentos verde y ámbar (css/variante-b.css)
+
+La mascota vive en `css/mascota.css`, común a los tres temas.
+
 ## Stack
 
 HTML5 + CSS3 + JavaScript nativo (ES modules). Sin frameworks, sin build y sin dependencias
@@ -166,11 +183,11 @@ Comandos ejecutados y resultados reales:
     cd U5A2_IMC && python3 -m http.server 8000 &
     curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/   # 200
 
-4) Capturas — 4 PNG con Chromium headless, servidas por HTTP (estado inicial, saludable 70/1.75,
-   sobrepeso 85/1.70, error peso=abc):
+4) Capturas — 5 PNG con Chromium headless, servidas por HTTP (inicial, saludable 70/1.75,
+   sobrepeso 85/1.70, obesidad 95/1.60, error peso=abc):
 
     file capturas/*.png
-    → PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced (los 4 archivos)
+    → PNG image data, 1280 x 960, 8-bit/color RGB, non-interlaced (los 5 archivos)
 
     Nota: como la app usa ES modules, las capturas se generaron sirviéndola por HTTP
     (http://localhost:8000/index.html?peso=...&estatura=...): por file:// los módulos no

@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora de IMC — Informática VI, Unidad 5 Actividad 2</title>
   <link rel="stylesheet" href="css/styles.css" id="hoja-estilos">
+  <link rel="stylesheet" href="css/mascota.css">
   <script>
-    // Variantes visuales para comparar estilos: ?tema=b o ?tema=c
+    // Tema oficial: C (oscuro, css/styles.css). Variantes comparables: ?tema=a y ?tema=b
     (function () {
       var tema = new URLSearchParams(location.search).get('tema');
-      var hojas = { b: 'css/variante-b.css', c: 'css/variante-c.css' };
+      var hojas = { a: 'css/variante-a.css', b: 'css/variante-b.css' };
       if (hojas[tema]) {
         document.getElementById('hoja-estilos').href = hojas[tema];
       }
@@ -59,6 +60,35 @@
         <h2 id="titulo-resultado" class="tarjeta-titulo">Resultado</h2>
 
         <div id="resultado" class="resultado" role="status" aria-live="polite">
+          <div class="mascota" id="mascota" aria-hidden="true">
+            <svg viewBox="0 0 160 172" focusable="false">
+              <defs>
+                <linearGradient id="grad-cuerpo" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#3ee0ab"/>
+                  <stop offset="100%" stop-color="#12a374"/>
+                </linearGradient>
+              </defs>
+              <ellipse cx="80" cy="160" rx="48" ry="8" fill="rgba(0,0,0,.45)"/>
+              <rect x="20" y="34" width="120" height="118" rx="30" fill="url(#grad-cuerpo)"/>
+              <rect x="21" y="35" width="118" height="116" rx="29" fill="none"
+                    stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+              <rect x="48" y="52" width="64" height="24" rx="8" fill="#0b1310" opacity=".85"/>
+              <rect x="55" y="60" width="34" height="3" rx="1.5" fill="#38d39f" opacity=".9"/>
+              <rect x="55" y="67" width="22" height="3" rx="1.5" fill="#38d39f" opacity=".55"/>
+              <g class="ojos">
+                <ellipse cx="63" cy="98" rx="7.5" ry="9.5" fill="#0b1310"/>
+                <ellipse cx="97" cy="98" rx="7.5" ry="9.5" fill="#0b1310"/>
+                <circle cx="65.6" cy="94.4" r="2.4" fill="#ffffff"/>
+                <circle cx="99.6" cy="94.4" r="2.4" fill="#ffffff"/>
+              </g>
+              <ellipse cx="45" cy="114" rx="6" ry="4" fill="#ff8f6b" opacity=".45"/>
+              <ellipse cx="115" cy="114" rx="6" ry="4" fill="#ff8f6b" opacity=".45"/>
+              <path id="boca" d="M66 120 q14 10 28 0" fill="none" stroke="#0b1310"
+                    stroke-width="3.4" stroke-linecap="round"/>
+              <rect x="34" y="146" width="30" height="10" rx="5" fill="#0b1310" opacity=".55"/>
+              <rect x="96" y="146" width="30" height="10" rx="5" fill="#0b1310" opacity=".55"/>
+            </svg>
+          </div>
           <p id="imc-valor" class="imc-valor">—</p>
           <p id="imc-categoria" class="imc-categoria">Ingresa estatura y peso para ver tu IMC</p>
 

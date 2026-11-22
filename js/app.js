@@ -11,6 +11,16 @@ const imcValor = document.getElementById('imc-valor');
 const imcCategoria = document.getElementById('imc-categoria');
 const resultado = document.getElementById('resultado');
 const marcador = document.getElementById('escala-marcador');
+const mascota = document.getElementById('mascota');
+const boca = document.getElementById('boca');
+
+/** Expresión de la mascota según la categoría (trazos SVG de la boca). */
+const BOCAS = {
+  'Bajo peso': 'M72 116 a7 8 0 1 0 16 0 a7 8 0 1 0 -16 0',   // boca pequeña, sorpresa
+  'Peso saludable': 'M64 116 q16 13 32 0',                     // sonrisa amplia
+  'Sobrepeso': 'M68 120 h24',                                  // línea neutra
+  'Obesidad': 'M64 124 q16 -12 32 0',                          // ceño / preocupación
+};
 
 const CAMPOS = {
   estatura: {
@@ -83,11 +93,21 @@ function validarCampo(campo) {
   return true;
 }
 
+/** Cambia la cara de la mascota y la hace saltar cuando el resultado cambia. */
+function animarMascota(categoria) {
+  if (!mascota || !boca) return;
+  boca.setAttribute('d', BOCAS[categoria] || 'M66 120 q14 10 28 0');
+  mascota.classList.remove('salta');
+  void mascota.offsetWidth; // fuerza reinicio de la animación CSS
+  mascota.classList.add('salta');
+}
+
 function mostrarVacio() {
   imcValor.textContent = '—';
   imcCategoria.textContent = 'Ingresa estatura y peso para ver tu IMC';
   resultado.className = 'resultado';
   marcador.classList.remove('visible');
+  if (boca) boca.setAttribute('d', 'M66 120 q14 10 28 0');
 }
 
 /** Coloca el marcador de la escala: rango visible 15 – 40 de IMC. */
@@ -132,6 +152,7 @@ function actualizar() {
     imcCategoria.textContent = categoria;
     aplicarCategoria(categoria);
     moverMarcador(imc);
+    animarMascota(categoria);
   } catch (error) {
     // Red de seguridad: la validación previa ya filtra estos casos, pero si algo
     // inesperado llega aquí, no se muestra "NaN" al usuario.
