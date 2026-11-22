@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de IMC — Informática VI, Unidad 5 Actividad 2</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="contenedor">
+    <header class="cabecera">
+      <h1>Calculadora de IMC</h1>
+      <p class="subtitulo">Índice de Masa Corporal — Informática VI, Unidad 5 Actividad 2</p>
+    </header>
+
+    <form id="form-imc" novalidate>
+      <div class="campo">
+        <label for="estatura">Estatura (metros, paso 0.01)</label>
+        <input type="text" id="estatura" name="estatura" inputmode="decimal"
+               step="0.01" placeholder="Ej. 1.75" autocomplete="off"
+               aria-invalid="false" aria-describedby="estatura-error">
+        <p class="error" id="estatura-error" hidden></p>
+      </div>
+
+      <div class="campo">
+        <label for="peso">Peso (kilogramos, paso 0.1)</label>
+        <input type="text" id="peso" name="peso" inputmode="decimal"
+               step="0.1" placeholder="Ej. 70" autocomplete="off"
+               aria-invalid="false" aria-describedby="peso-error">
+        <p class="error" id="peso-error" hidden></p>
+      </div>
+
+      <button type="submit" id="btn-calcular">Calcular</button>
+      <p class="nota">El resultado se actualiza automáticamente al escribir; no es necesario pulsar el botón.</p>
+    </form>
+
+    <section id="resultado" class="resultado" role="status" aria-live="polite">
+      <div class="resultado-fila">
+        <span class="resultado-etiqueta">IMC</span>
+        <span id="imc-valor" class="resultado-valor">—</span>
+      </div>
+      <div class="resultado-fila">
+        <span class="resultado-etiqueta">Interpretación</span>
+        <span id="imc-categoria" class="resultado-categoria">—</span>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# Dependencias (no aplica: el proyecto no usa npm)
+node_modules/
+
+# Archivos temporales y del sistema
+*.log
+.DS_Store
+
+# Capturas se mantienen como entregable: NO se ignoran.
