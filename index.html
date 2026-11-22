@@ -4,7 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora de IMC — Informática VI, Unidad 5 Actividad 2</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css" id="hoja-estilos">
+  <script>
+    // Variante visual para comparar estilos: ?tema=b carga css/variante-b.css
+    if (new URLSearchParams(location.search).get('tema') === 'b') {
+      document.getElementById('hoja-estilos').href = 'css/variante-b.css';
+    }
+  </script>
 </head>
 <body>
   <main class="contenedor">

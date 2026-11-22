@@ -1,0 +1,328 @@
+/* Calculadora de IMC — variante B: moderna con color
+   Se activa con ?tema=b (si no, se usa el estilo A de styles.css) */
+
+:root {
+  --fondo: #f7fbf8;
+  --tarjeta: #ffffff;
+  --texto: #10231b;
+  --texto-suave: #4e6b5f;
+  --borde: #dcebe4;
+  --borde-fuerte: #c6ded4;
+  --verde: #0f9d58;
+  --verde-oscuro: #0a7a44;
+  --verde-suave: #e7f7ee;
+  --ambar: #f2a33c;
+  --error: #c0392b;
+
+  --zona-bajo: #7ec8f0;
+  --zona-saludable: #12a35c;
+  --zona-sobre: #f2a33c;
+  --zona-obesidad: #e0603f;
+
+  --radio: 22px;
+  --sombra: 0 2px 4px rgba(12, 54, 37, .05), 0 18px 40px rgba(12, 54, 37, .10);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 3.5rem 1.25rem 4rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--texto);
+  background:
+    radial-gradient(680px 380px at 8% -6%, rgba(18, 163, 92, .16), transparent 70%),
+    radial-gradient(560px 320px at 100% 0%, rgba(242, 163, 60, .18), transparent 70%),
+    var(--fondo);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+.contenedor { max-width: 980px; margin: 0 auto; }
+
+/* ---------- Encabezado ---------- */
+
+.cabecera { margin-bottom: 2.25rem; }
+
+.materia {
+  display: inline-block;
+  margin: 0 0 .85rem;
+  padding: .32rem .75rem;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--verde-oscuro);
+  background: var(--verde-suave);
+  border: 1px solid #c9ecd9;
+  border-radius: 999px;
+}
+
+h1 {
+  margin: 0 0 .4rem;
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1.1;
+  background: linear-gradient(95deg, #0a7a44 0%, #12a35c 55%, #f2a33c 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitulo { margin: 0; font-size: 1.05rem; color: var(--texto-suave); }
+
+/* ---------- Rejilla ---------- */
+
+.rejilla {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.35rem;
+}
+
+@media (min-width: 820px) {
+  .rejilla { grid-template-columns: 5fr 7fr; align-items: start; }
+}
+
+.tarjeta {
+  position: relative;
+  padding: 1.9rem;
+  background: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+/* franja de color superior */
+.tarjeta::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--verde) 0%, #6ccf9d 45%, var(--ambar) 100%);
+}
+
+.tarjeta-titulo {
+  margin: 0 0 1.35rem;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--verde-oscuro);
+}
+
+/* ---------- Campos ---------- */
+
+.campo { margin-bottom: 1.35rem; }
+
+label {
+  display: block;
+  margin-bottom: .45rem;
+  font-size: .9rem;
+  font-weight: 700;
+}
+
+.campo-entrada {
+  display: flex;
+  align-items: center;
+  background: #f4faf6;
+  border: 1.5px solid var(--borde-fuerte);
+  border-radius: 14px;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.campo-entrada:focus-within {
+  background: #fff;
+  border-color: var(--verde);
+  box-shadow: 0 0 0 4px rgba(18, 163, 92, .16);
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  padding: .8rem .95rem;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto);
+  background: transparent;
+  border: 0;
+  border-radius: 14px;
+}
+
+input:focus { outline: none; }
+input::placeholder { color: #9db3a8; font-weight: 500; }
+
+.unidad {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  padding: 0 .95rem 0 .6rem;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--verde-oscuro);
+  border-left: 1px solid var(--borde);
+}
+
+.campo-entrada[data-estado="error"] {
+  background: #fdf1ef;
+  border-color: var(--error);
+  box-shadow: 0 0 0 4px rgba(192, 57, 43, .12);
+}
+
+.error {
+  margin: .45rem 0 0;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--error);
+}
+
+.error[hidden] { display: none; }
+
+.nota { margin: 1.35rem 0 0; font-size: .85rem; color: var(--texto-suave); }
+
+/* ---------- Resultado ---------- */
+
+.resultado { text-align: center; padding-top: .25rem; }
+
+.imc-valor {
+  margin: 0;
+  font-size: 4.5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.045em;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto);
+  transition: color .25s ease, transform .18s ease;
+}
+
+.imc-categoria {
+  display: inline-block;
+  margin: .75rem 0 1.75rem;
+  padding: .4rem 1rem;
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--texto-suave);
+  background: #f1f6f3;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  transition: color .2s ease, background .2s ease, border-color .2s ease;
+}
+
+.resultado.bajo-peso .imc-valor { color: #2a86bd; }
+.resultado.bajo-peso .imc-categoria {
+  color: #1d6693; background: #e8f5fc; border-color: #bfe3f6;
+}
+
+.resultado.saludable .imc-valor { color: var(--verde-oscuro); }
+.resultado.saludable .imc-categoria {
+  color: #0a7a44; background: var(--verde-suave); border-color: #bfe9d2;
+}
+
+.resultado.sobrepeso .imc-valor { color: #b9761a; }
+.resultado.sobrepeso .imc-categoria {
+  color: #8d5a11; background: #fdf3e3; border-color: #f6ddb4;
+}
+
+.resultado.obesidad .imc-valor { color: #b8422c; }
+.resultado.obesidad .imc-categoria {
+  color: #97341f; background: #fdeeea; border-color: #f6c8bd;
+}
+
+/* ---------- Escala ---------- */
+
+.escala { position: relative; margin: 2.75rem 0 .25rem; }
+
+.escala-barras {
+  display: flex;
+  height: 16px;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .12);
+}
+
+.zona { display: block; height: 100%; }
+
+.zona-bajo      { width: 14%; background: var(--zona-bajo); }
+.zona-saludable { width: 26%; background: var(--zona-saludable); }
+.zona-sobre     { width: 20%; background: var(--zona-sobre); }
+.zona-obesidad  { width: 40%; background: var(--zona-obesidad); }
+
+.escala-marcador {
+  position: absolute;
+  top: -7px;
+  left: 0;
+  width: 4px;
+  height: 30px;
+  border-radius: 3px;
+  background: #10231b;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px rgba(18, 163, 92, .28);
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: left .35s cubic-bezier(.2, .8, .2, 1), opacity .2s ease;
+}
+
+.escala-marcador.visible { opacity: 1; animation: pulso .6s ease; }
+
+@keyframes pulso {
+  0%   { box-shadow: 0 0 0 3px #fff, 0 0 0 6px rgba(18, 163, 92, .55); }
+  100% { box-shadow: 0 0 0 3px #fff, 0 0 0 6px rgba(18, 163, 92, .18); }
+}
+
+.escala-etiquetas {
+  display: flex;
+  justify-content: space-between;
+  margin-top: .6rem;
+  font-size: .74rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-suave);
+}
+
+/* ---------- Tabla ---------- */
+
+.tabla-referencia {
+  width: 100%;
+  margin-top: 1.9rem;
+  border-collapse: separate;
+  border-spacing: 0 4px;
+  font-size: .85rem;
+}
+
+.tabla-referencia caption {
+  margin-bottom: .6rem;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--verde-oscuro);
+  text-align: left;
+}
+
+.tabla-referencia th,
+.tabla-referencia td {
+  padding: .5rem .75rem;
+  background: #f6faf8;
+  font-weight: 600;
+  text-align: left;
+}
+
+.tabla-referencia th { border-radius: 10px 0 0 10px; }
+
+.tabla-referencia td {
+  border-radius: 0 10px 10px 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-suave);
+}
+
+@media (max-width: 480px) {
+  body { padding: 2.25rem 1rem 3rem; }
+  h1 { font-size: 1.95rem; }
+  .imc-valor { font-size: 3.4rem; }
+  .tarjeta { padding: 1.4rem; border-radius: 18px; }
+}
