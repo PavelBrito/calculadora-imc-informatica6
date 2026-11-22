@@ -127,6 +127,8 @@ function precargarDesdeURL() {
 
 pesoInput.addEventListener('input', actualizar);
 estaturaInput.addEventListener('input', actualizar);
+// No hay botón "Calcular": el cálculo es automático. El handler de submit solo evita
+// que pulsar Enter recargue la página (envío implícito del formulario).
 form.addEventListener('submit', (evento) => {
   evento.preventDefault();
   actualizar();

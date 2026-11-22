@@ -63,19 +63,6 @@ input[aria-invalid="true"] { border-color: var(--error); }
 
 .error[hidden] { display: none; }
 
-button {
-  padding: 0.65rem 1.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #fff;
-  background: var(--acento);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-button:hover { background: #1d4ed8; }
-
 .nota { margin-top: 0.75rem; color: var(--texto-suave); font-size: 0.85rem; }
 
 .resultado {

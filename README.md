@@ -8,7 +8,9 @@
 
 Aplicación web local que calcula el Índice de Masa Corporal (IMC) a partir de la estatura
 (en metros) y el peso (en kilogramos) ingresados por el usuario. El resultado se actualiza
-automáticamente mientras se escribe, sin necesidad de pulsar un botón.
+automáticamente mientras se escribe. No hay botón "Calcular": el cálculo es automático
+porque el plan de la asignatura pide que el resultado se actualice "cada que se ingresen
+los datos".
 
 Fórmula:
 
@@ -137,7 +139,8 @@ Comandos ejecutados y resultados reales:
     file capturas/*.png
     → PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced (los 3 archivos)
 
-    Nota: como la app usa ES modules, las capturas se generaron con el flag
-    --allow-file-access-from-files (los módulos no se cargan por file:// sin ese flag).
+    Nota: como la app usa ES modules, las capturas se generaron sirviéndola por HTTP
+    (http://localhost:8000/index.html?peso=...&estatura=...): por file:// los módulos no
+    se cargan sin --allow-file-access-from-files.
 
 5) Git: historial de 7 commits y etiqueta `v1.0` (ver `git log --oneline`).
