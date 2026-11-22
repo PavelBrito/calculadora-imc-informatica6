@@ -10,10 +10,12 @@ const estaturaInput = document.getElementById('estatura');
 const imcValor = document.getElementById('imc-valor');
 const imcCategoria = document.getElementById('imc-categoria');
 const resultado = document.getElementById('resultado');
+const marcador = document.getElementById('escala-marcador');
 
 const CAMPOS = {
   estatura: {
     input: estaturaInput,
+    wrapper: estaturaInput.closest('.campo-entrada'),
     error: document.getElementById('estatura-error'),
     min: 0.5,
     max: 2.5,
@@ -23,6 +25,7 @@ const CAMPOS = {
   },
   peso: {
     input: pesoInput,
+    wrapper: pesoInput.closest('.campo-entrada'),
     error: document.getElementById('peso-error'),
     min: 2,
     max: 300,
@@ -44,12 +47,14 @@ function esNumeroValido(texto) {
 
 function setError(campo, mensaje) {
   campo.input.setAttribute('aria-invalid', 'true');
+  if (campo.wrapper) campo.wrapper.dataset.estado = 'error';
   campo.error.textContent = mensaje;
   campo.error.hidden = false;
 }
 
 function limpiarError(campo) {
   campo.input.setAttribute('aria-invalid', 'false');
+  if (campo.wrapper) delete campo.wrapper.dataset.estado;
   campo.error.textContent = '';
   campo.error.hidden = true;
 }
@@ -80,8 +85,18 @@ function validarCampo(campo) {
 
 function mostrarVacio() {
   imcValor.textContent = '—';
-  imcCategoria.textContent = '—';
+  imcCategoria.textContent = 'Ingresa estatura y peso para ver tu IMC';
   resultado.className = 'resultado';
+  marcador.classList.remove('visible');
+}
+
+/** Coloca el marcador de la escala: rango visible 15 – 40 de IMC. */
+function moverMarcador(imc) {
+  const MIN = 15;
+  const MAX = 40;
+  const pct = Math.min(100, Math.max(0, ((imc - MIN) / (MAX - MIN)) * 100));
+  marcador.style.left = `${pct}%`;
+  marcador.classList.add('visible');
 }
 
 function aplicarCategoria(categoria) {
@@ -108,12 +123,24 @@ function actualizar() {
 
   const peso = parseFloat(normalizar(pesoInput.value));
   const estatura = parseFloat(normalizar(estaturaInput.value));
-  const imc = calcularIMC(peso, estatura);
-  const categoria = clasificarIMC(imc);
 
-  imcValor.textContent = imc.toFixed(2);
-  imcCategoria.textContent = categoria;
-  aplicarCategoria(categoria);
+  try {
+    const imc = calcularIMC(peso, estatura);
+    const categoria = clasificarIMC(imc);
+
+    imcValor.textContent = imc.toFixed(2);
+    imcCategoria.textContent = categoria;
+    aplicarCategoria(categoria);
+    moverMarcador(imc);
+  } catch (error) {
+    // Red de seguridad: la validación previa ya filtra estos casos, pero si algo
+    // inesperado llega aquí, no se muestra "NaN" al usuario.
+    console.error('No se pudo calcular el IMC:', error);
+    imcValor.textContent = '—';
+    imcCategoria.textContent = 'No fue posible calcular el IMC con esos datos';
+    resultado.className = 'resultado';
+    marcador.classList.remove('visible');
+  }
 }
 
 /** Precarga los campos desde la URL (?peso=70&estatura=1.75) para capturas. */

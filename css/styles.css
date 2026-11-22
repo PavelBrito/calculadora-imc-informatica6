@@ -1,93 +1,292 @@
-/* Calculadora de IMC — Informática VI, Unidad 5 Actividad 2 */
+/* Calculadora de IMC — Informática VI, Unidad 5 Actividad 2
+   Estilo A: clínico sobrio (blanco, azul profundo, tonos fríos) */
+
 :root {
-  --fondo: #f4f6f8;
+  --fondo: #eef2f7;
   --tarjeta: #ffffff;
-  --texto: #1f2933;
-  --texto-suave: #52606d;
-  --borde: #d8dee4;
-  --acento: #2563eb;
-  --error: #dc2626;
-  --bajo-peso: #dbeafe;   /* azul claro   */
-  --saludable: #dcfce7;   /* verde claro  */
-  --sobrepeso: #fef3c7;   /* ámbar claro  */
-  --obesidad: #fee2e2;    /* rojo claro   */
+  --texto: #16202b;
+  --texto-suave: #5a6b7d;
+  --borde: #d7dfe8;
+  --borde-fuerte: #c2ceda;
+  --acento: #1d4ed8;
+  --acento-suave: #e8eefc;
+  --error: #b91c1c;
+
+  /* zonas de la escala (tonos fríos, AA sobre texto blanco/oscuro) */
+  --zona-bajo: #7fb0e0;
+  --zona-saludable: #2f9e6f;
+  --zona-sobre: #d99b2b;
+  --zona-obesidad: #c0503f;
+
+  --radio: 14px;
+  --sombra: 0 1px 2px rgba(16, 32, 48, .06), 0 8px 24px rgba(16, 32, 48, .06);
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
+  padding: 3rem 1.25rem 4rem;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  background: var(--fondo);
+  font-size: 16px;
+  line-height: 1.55;
   color: var(--texto);
-  line-height: 1.5;
+  background:
+    radial-gradient(1200px 500px at 50% -10%, #ffffff 0%, var(--fondo) 60%) no-repeat,
+    var(--fondo);
+  -webkit-font-smoothing: antialiased;
 }
 
 .contenedor {
-  max-width: 480px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: var(--tarjeta);
-  border: 1px solid var(--borde);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  max-width: 940px;
+  margin: 0 auto;
 }
 
-h1 { margin: 0 0 0.25rem; font-size: 1.75rem; }
-.subtitulo { margin: 0 0 1.5rem; color: var(--texto-suave); }
+/* ---------- Encabezado ---------- */
+
+.cabecera { margin-bottom: 2rem; }
+
+.materia {
+  margin: 0 0 .5rem;
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--acento);
+}
+
+h1 {
+  margin: 0 0 .35rem;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.subtitulo {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--texto-suave);
+}
+
+/* ---------- Rejilla de dos columnas ---------- */
+
+.rejilla {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 820px) {
+  .rejilla { grid-template-columns: 5fr 7fr; align-items: start; }
+}
+
+.tarjeta {
+  padding: 1.75rem;
+  background: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.tarjeta-titulo {
+  margin: 0 0 1.25rem;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+}
+
+/* ---------- Campos ---------- */
 
 .campo { margin-bottom: 1.25rem; }
 
-label { display: block; margin-bottom: 0.35rem; font-weight: 600; }
+label {
+  display: block;
+  margin-bottom: .4rem;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.campo-entrada {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--borde-fuerte);
+  border-radius: 10px;
+  background: #fff;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.campo-entrada:focus-within {
+  border-color: var(--acento);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, .15);
+}
 
 input {
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  font-size: 1rem;
-  border: 1px solid var(--borde);
-  border-radius: 8px;
+  flex: 1;
+  min-width: 0;
+  padding: .7rem .85rem;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto);
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
 }
 
-input:focus {
-  outline: 2px solid var(--acento);
-  outline-offset: 1px;
+input:focus { outline: none; }
+
+input::placeholder { color: #a2afbd; }
+
+.unidad {
+  padding: 0 .9rem 0 .5rem;
+  font-size: .9rem;
+  color: var(--texto-suave);
+  border-left: 1px solid var(--borde);
+  align-self: stretch;
+  display: flex;
+  align-items: center;
 }
 
-input[aria-invalid="true"] { border-color: var(--error); }
+.campo-entrada[data-estado="error"] {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(185, 28, 28, .12);
+}
 
 .error {
-  margin: 0.35rem 0 0;
+  margin: .4rem 0 0;
+  font-size: .85rem;
+  font-weight: 500;
   color: var(--error);
-  font-size: 0.9rem;
 }
 
 .error[hidden] { display: none; }
 
-.nota { margin-top: 0.75rem; color: var(--texto-suave); font-size: 0.85rem; }
-
-.resultado {
-  margin-top: 1.5rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid var(--borde);
-  border-radius: 8px;
-  background: #f8fafc;
+.nota {
+  margin: 1.25rem 0 0;
+  font-size: .85rem;
+  color: var(--texto-suave);
 }
 
-.resultado-fila {
+/* ---------- Resultado ---------- */
+
+.resultado { text-align: center; }
+
+.imc-valor {
+  margin: 0;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto);
+  transition: color .2s ease;
+}
+
+.imc-categoria {
+  margin: .5rem 0 1.5rem;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  transition: color .2s ease;
+}
+
+/* color por categoría, aplicado al número y a la etiqueta */
+.resultado.bajo-peso .imc-valor,
+.resultado.bajo-peso .imc-categoria { color: #2a6ea8; }
+.resultado.saludable .imc-valor,
+.resultado.saludable .imc-categoria { color: #1f7a55; }
+.resultado.sobrepeso .imc-valor,
+.resultado.sobrepeso .imc-categoria { color: #96650f; }
+.resultado.obesidad .imc-valor,
+.resultado.obesidad .imc-categoria { color: #a33528; }
+
+/* ---------- Escala de referencia ---------- */
+
+.escala {
+  position: relative;
+  margin: 2.25rem 0 .25rem;
+  padding-top: 0;
+}
+
+.escala-barras {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--borde);
+}
+
+.zona { display: block; height: 100%; }
+
+/* proporciones reales sobre el rango 15–40 */
+.zona-bajo      { width: 14%;  background: var(--zona-bajo); }
+.zona-saludable { width: 26%;  background: var(--zona-saludable); }
+.zona-sobre     { width: 20%;  background: var(--zona-sobre); }
+.zona-obesidad  { width: 40%;  background: var(--zona-obesidad); }
+
+.escala-marcador {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 3px;
+  height: 20px;
+  border-radius: 2px;
+  background: var(--texto);
+  box-shadow: 0 0 0 2px #fff;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: left .25s ease, opacity .2s ease;
+}
+
+.escala-marcador.visible { opacity: 1; }
+
+.escala-etiquetas {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
+  margin-top: .5rem;
+  font-size: .72rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-suave);
 }
 
-.resultado-fila + .resultado-fila { margin-top: 0.35rem; }
+/* ---------- Tabla de referencia ---------- */
 
-.resultado-etiqueta { color: var(--texto-suave); font-size: 0.9rem; }
-.resultado-valor { font-size: 2rem; font-weight: 700; }
-.resultado-categoria { font-weight: 600; }
+.tabla-referencia {
+  width: 100%;
+  margin-top: 1.75rem;
+  border-collapse: collapse;
+  font-size: .85rem;
+}
 
-/* Colores de fondo por categoría (siempre con texto explícito) */
-.resultado.bajo-peso { background: var(--bajo-peso); border-color: #93c5fd; }
-.resultado.saludable { background: var(--saludable); border-color: #86efac; }
-.resultado.sobrepeso { background: var(--sobrepeso); border-color: #fcd34d; }
-.resultado.obesidad  { background: var(--obesidad);  border-color: #fca5a5; }
+.tabla-referencia caption {
+  margin-bottom: .5rem;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+  text-align: left;
+}
+
+.tabla-referencia th,
+.tabla-referencia td {
+  padding: .45rem 0;
+  border-top: 1px solid var(--borde);
+  font-weight: 500;
+  text-align: left;
+}
+
+.tabla-referencia td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-suave);
+}
+
+@media (max-width: 480px) {
+  body { padding: 2rem 1rem 3rem; }
+  h1 { font-size: 1.6rem; }
+  .imc-valor { font-size: 2.75rem; }
+  .tarjeta { padding: 1.35rem; }
+}

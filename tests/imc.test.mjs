@@ -39,3 +39,28 @@ test('clasificarIMC: categorías intermedias', () => {
   assert.strictEqual(clasificarIMC(27.5), 'Sobrepeso');
   assert.strictEqual(clasificarIMC(35.0), 'Obesidad');
 });
+
+// --- Manejo de entradas no válidas (excepciones) ---
+
+test('calcularIMC lanza TypeError si recibe algo que no es número finito', () => {
+  assert.throws(() => calcularIMC(NaN, 1.75), TypeError);
+  assert.throws(() => calcularIMC(70, NaN), TypeError);
+  assert.throws(() => calcularIMC(Infinity, 1.75), TypeError);
+  assert.throws(() => calcularIMC('70', 1.75), TypeError);
+  assert.throws(() => calcularIMC(70, null), TypeError);
+});
+
+test('calcularIMC lanza RangeError si la estatura es cero o negativa', () => {
+  assert.throws(() => calcularIMC(70, 0), RangeError);
+  assert.throws(() => calcularIMC(70, -1.75), RangeError);
+});
+
+test('calcularIMC lanza RangeError si el peso es cero o negativo', () => {
+  assert.throws(() => calcularIMC(0, 1.75), RangeError);
+  assert.throws(() => calcularIMC(-70, 1.75), RangeError);
+});
+
+test('clasificarIMC lanza TypeError con NaN o Infinity', () => {
+  assert.throws(() => clasificarIMC(NaN), TypeError);
+  assert.throws(() => clasificarIMC(Infinity), TypeError);
+});

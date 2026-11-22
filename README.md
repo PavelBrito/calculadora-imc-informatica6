@@ -87,6 +87,34 @@ Accesibilidad:
 - El panel de resultado usa `role="status"` y `aria-live="polite"`.
 - Color de fondo distinto por categoría, siempre acompañado de texto explícito (no solo color).
 
+## Manejo de entradas no válidas y de excepciones
+
+Hay tres capas, de la más cercana al usuario a la más defensiva:
+
+1. **Validación en la interfaz (`js/app.js`).** Antes de calcular, cada campo se valida con una
+   expresión regular y un rango. Si el valor no es un número o está fuera de rango, se muestra
+   el mensaje junto al campo, se marca `aria-invalid="true"` y el resultado queda en "—".
+   Casos cubiertos y verificados en el navegador:
+
+   | Entrada en el campo peso | Mensaje mostrado |
+   |---|---|
+   | `abc`, `@`, `70kg`, `-70`, `1e5`, `70.5.5` | "El peso debe ser un número (usa punto o coma decimal)." |
+   | `0`, `500` | "El peso debe estar entre 2 y 300 kg." |
+   | `""` (vacío) | sin mensaje; resultado en "—" (datos incompletos) |
+   | ` 70 `, `70,5`, `70.5` | válido → 22.86 / 23.02 / 23.02 |
+
+   En el campo estatura se comporta igual: `abc` y `..` dan "debe ser un número", `0` y `3` dan
+   "debe estar entre 0.5 y 2.5 m", y `1,75` / `1.75` calculan correctamente.
+
+2. **Respuesta a la división y a los tipos (`js/imc.js`).** `calcularIMC` rechaza valores que no
+   son números finitos (`NaN`, `Infinity`, cadenas, `null`) con `TypeError`, y estatura o peso
+   iguales o menores que cero con `RangeError`. `clasificarIMC` también rechaza `NaN`. Esto
+   evita que un `NaN` o un `Infinity` lleguen a la vista; hay pruebas dedicadas para cada caso.
+
+3. **Red de seguridad en la interfaz.** La llamada a `calcularIMC`/`clasificarIMC` está dentro de
+   `try/catch`. Si algo inesperado llegara a fallar, se registra en la consola y el panel muestra
+   "No fue posible calcular el IMC con esos datos" en lugar de una cifra rota.
+
 ## Publicar en GitHub y en GitLab
 
 El repositorio se crea manualmente en la web (visibilidad pública). No se crean cuentas ni se
@@ -111,7 +139,7 @@ Nota: si ya se agregó un remote y se quiere usar el otro, quitarlo antes con
 
 Comandos ejecutados y resultados reales:
 
-1) Pruebas unitarias (`node --test tests/`) — 8 pruebas, 8 pasan, 0 fallan:
+1) Pruebas unitarias (`node --test tests/`) — 12 pruebas, 12 pasan, 0 fallan:
 
     ✔ calcularIMC usa la fórmula peso / estatura²
     ✔ calcularIMC redondeado a 2 decimales da 22.86 para 70 kg / 1.75 m
@@ -121,7 +149,11 @@ Comandos ejecutados y resultados reales:
     ✔ clasificarIMC: 24.95 se clasifica como Sobrepeso (decisión documentada)
     ✔ clasificarIMC: límite sobrepeso / obesidad en 29.9 y 30.0
     ✔ clasificarIMC: categorías intermedias
-    ℹ tests 8 · pass 8 · fail 0
+    ✔ calcularIMC lanza TypeError si recibe algo que no es número finito
+    ✔ calcularIMC lanza RangeError si la estatura es cero o negativa
+    ✔ calcularIMC lanza RangeError si el peso es cero o negativo
+    ✔ clasificarIMC lanza TypeError con NaN o Infinity
+    ℹ tests 12 · pass 12 · fail 0
 
 2) Sintaxis y carga del módulo:
 
@@ -134,10 +166,11 @@ Comandos ejecutados y resultados reales:
     cd U5A2_IMC && python3 -m http.server 8000 &
     curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/   # 200
 
-4) Capturas — 3 PNG con Chromium headless (saludable 70/1.75, sobrepeso 85/1.70, error peso=abc):
+4) Capturas — 4 PNG con Chromium headless, servidas por HTTP (estado inicial, saludable 70/1.75,
+   sobrepeso 85/1.70, error peso=abc):
 
     file capturas/*.png
-    → PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced (los 3 archivos)
+    → PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced (los 4 archivos)
 
     Nota: como la app usa ES modules, las capturas se generaron sirviéndola por HTTP
     (http://localhost:8000/index.html?peso=...&estatura=...): por file:// los módulos no

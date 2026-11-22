@@ -12,7 +12,23 @@
  * @returns {number} IMC sin redondear.
  */
 export function calcularIMC(peso, estatura) {
-  return peso / (estatura * estatura);
+  if (!Number.isFinite(peso) || !Number.isFinite(estatura)) {
+    throw new TypeError('El peso y la estatura deben ser números finitos.');
+  }
+  if (estatura <= 0) {
+    throw new RangeError('La estatura debe ser mayor que cero.');
+  }
+  if (peso <= 0) {
+    throw new RangeError('El peso debe ser mayor que cero.');
+  }
+
+  const imc = peso / (estatura * estatura);
+
+  // Defensa final: si por cualquier razón el resultado no es finito, no se propaga.
+  if (!Number.isFinite(imc)) {
+    throw new RangeError('No fue posible calcular un IMC válido con esos datos.');
+  }
+  return imc;
 }
 
 /**
@@ -37,6 +53,9 @@ export function redondear2(valor) {
  * @returns {string} 'Bajo peso' | 'Peso saludable' | 'Sobrepeso' | 'Obesidad'
  */
 export function clasificarIMC(imc) {
+  if (!Number.isFinite(imc)) {
+    throw new TypeError('El IMC debe ser un número finito para poder clasificarse.');
+  }
   const imc2 = redondear2(imc);
   if (imc2 < 18.5) {
     return 'Bajo peso';
