@@ -18,6 +18,7 @@ const CAMPOS = {
     min: 0.5,
     max: 2.5,
     nombre: 'estatura',
+    articulo: 'La',
     unidad: 'm',
   },
   peso: {
@@ -26,6 +27,7 @@ const CAMPOS = {
     min: 2,
     max: 300,
     nombre: 'peso',
+    articulo: 'El',
     unidad: 'kg',
   },
 };
@@ -62,13 +64,13 @@ function validarCampo(campo) {
   }
 
   if (!esNumeroValido(valor)) {
-    setError(campo, `La ${campo.nombre} debe ser un número (usa punto o coma decimal).`);
+    setError(campo, `${campo.articulo} ${campo.nombre} debe ser un número (usa punto o coma decimal).`);
     return false;
   }
 
   const numero = parseFloat(normalizar(valor));
   if (numero < campo.min || numero > campo.max) {
-    setError(campo, `La ${campo.nombre} debe estar entre ${campo.min} y ${campo.max} ${campo.unidad}.`);
+    setError(campo, `${campo.articulo} ${campo.nombre} debe estar entre ${campo.min} y ${campo.max} ${campo.unidad}.`);
     return false;
   }
 
