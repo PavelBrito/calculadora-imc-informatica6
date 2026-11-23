@@ -43,12 +43,17 @@ npm. Node.js solo se usa para ejecutar las pruebas.
 
 ## Cómo ejecutarlo
 
-Opción 1 (recomendada) — servidor estático con Python:
+Opción 1 (recomendada) — servidor estático con Python, atado solo a localhost:
 
     cd U5A2_IMC
-    python3 -m http.server 8000
+    python3 -m http.server 8000 --bind 127.0.0.1
 
 Abrir http://localhost:8000
+
+Importante: sin `--bind 127.0.0.1`, `http.server` escucha en `0.0.0.0` y publica la carpeta
+a toda la red local (cualquiera en el mismo Wi-Fi podría abrirla y listar los archivos). El
+flag lo limita a tu propia máquina, que es lo que pide la actividad ("en tu computadora en
+localhost").
 
 Opción 2 — con npx serve:
 
@@ -103,6 +108,17 @@ Accesibilidad:
 
 - El panel de resultado usa `role="status"` y `aria-live="polite"`.
 - Color de fondo distinto por categoría, siempre acompañado de texto explícito (no solo color).
+
+## Seguridad
+
+- La aplicación no tiene backend, base de datos, formularios que envíen datos ni credenciales:
+  todo el cálculo ocurre en el navegador. No hay nada que un tercero pueda robar desde la app.
+- No hay secretos en el repositorio: ni `.env`, ni llaves, ni tokens. El correo que aparece en
+  los commits es `pavel@example.com` (ficticio, dominio reservado para ejemplos).
+- El servidor de desarrollo debe escucharse **solo en localhost** (`--bind 127.0.0.1`, ver
+  arriba). Con la configuración por defecto (`0.0.0.0`) la carpeta queda visible para cualquier
+  equipo de la red local.
+- `.gitignore` excluye los archivos de sistema operativo y de editores.
 
 ## Manejo de entradas no válidas y de excepciones
 
