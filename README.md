@@ -45,7 +45,7 @@ npm. Node.js solo se usa para ejecutar las pruebas.
 
 Opción 1 (recomendada) — servidor estático con Python, atado solo a localhost:
 
-    cd U5A2_IMC
+    cd calculadora-imc-informatica6
     python3 -m http.server 8000 --bind 127.0.0.1
 
 Abrir http://localhost:8000
@@ -57,7 +57,7 @@ localhost").
 
 Opción 2 — con npx serve:
 
-    cd U5A2_IMC
+    cd calculadora-imc-informatica6
     npx serve .
 
 Abrir la URL que indique (por defecto http://localhost:3000).
@@ -196,7 +196,7 @@ Comandos ejecutados y resultados reales:
 
 3) Servidor:
 
-    cd U5A2_IMC && python3 -m http.server 8000 &
+    cd calculadora-imc-informatica6 && python3 -m http.server 8000 &
     curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/   # 200
 
 4) Capturas — 5 PNG con Chromium headless, servidas por HTTP (inicial, saludable 70/1.75,
